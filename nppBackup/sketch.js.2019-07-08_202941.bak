@@ -1,0 +1,28 @@
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+} 
+function getGaussian(){
+    return Math.round(Math.random());
+}
+
+var canvas = document.getElementById("canv");
+var wallsDestroyed = 0;
+var gravity =1;
+var birdies = [];
+
+function draw()
+{
+	var ctx = canvas.getContext("2d");
+	canvas.clearRect(0,0,canvas.width,canvas.height);
+	updateBirdies(ctx);
+}
+
+function updateBirdies(ctx)
+{
+	for(var i in birdies)
+	{
+		birdies[i].update(ctx);
+	}
+}

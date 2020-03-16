@@ -1,0 +1,7 @@
+
+function nextGeneration()
+{
+	var bestBirdieFitness = deadBirdies[deadBirdies.length-1].fitness;
+	
+	
+}

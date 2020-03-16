@@ -1,0 +1,16 @@
+class Wall
+{
+	constructor(y,height)
+	{
+		this.x = canvas.width/2;
+		this.y = y;
+		this.width = wallWidth;
+		this.height = height;
+	}
+	update(ctx)
+	{
+		this.x-=wallSpeed;
+		ctx.fillStyle = "#007700";
+		ctx.fillRect(this.x,this.y,this.width,this.height);
+	}
+}

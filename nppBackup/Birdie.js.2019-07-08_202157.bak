@@ -1,0 +1,26 @@
+const birdImg = new Image(70, 51);
+birdImg.src = 'flappy.png';
+class Birdie{
+	constructor(brain)
+	{
+		this.fitness = 0;
+		this.x = 100;
+		this.y = canvas.height/2;
+		this.speedY = 0;
+		this.brain = brain;
+		this.image = birdImg;
+		this.score = 0;
+		this.width = 70;
+		this.height = 51;
+	}
+	update(ctx)
+	{
+		
+		
+		
+		ctx.drawImage(this.image,this.width,this.height);
+		
+		return this;
+	}
+	
+}

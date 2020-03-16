@@ -1,0 +1,144 @@
+
+function nextGeneration()
+{
+	var isThereAnyGood = false;
+	while(deadBirdies[deadBirdies.length-1].fitness>100)
+	{
+		for(var i in deadBirdies)
+		{
+			deadBirdies[i].fitness/=10;
+			deadBirdies[i].fitness = Math.ceil(deadBirdies[i].fitness);
+			if(deadBirdies[i].fitness>0)isThereAnyGood = true;
+		}
+	}
+	for(var i in deadBirdies)
+	{
+		if(deadBirdies[i].fitness>0)isThereAnyGood = true;
+	}
+	if(!isThereAnyGood)
+	{	
+		newPopulation();
+		console.log("TRASH")
+		return;
+	}
+	var matingPool =[];
+	
+	for(var i in deadBirdies)
+	{
+		for(var g=0;g<deadBirdies[i].fitness;g++)
+		{
+			matingPool.push(deadBirdies[i].brain);
+		}
+	}
+	
+	var kids = [];
+	
+	for(var h=0;h<maxPopulation;h++)
+	{
+		var random = getRandomInt(0,matingPool.length-1);
+		var parent1 = matingPool[random];
+		random = getRandomInt(0,matingPool.length-1);
+		var parent2 = matingPool[random];
+		
+		var tempBrain = new NeuralNetwork(3,hiddenNodes,1,hiddenLayers);
+		
+		random = getRandomInt(0,tempBrain.weightsToHidden.length-1);
+		for(var i in tempBrain.weightsToHidden.matrix)
+		{
+			if(i<random)
+			{
+				tempBrain.weightsToHidden.matrix[i] = parent1.weightsToHidden.matrix[i];
+			}
+			else
+			{
+				tempBrain.weightsToHidden.matrix[i] = parent2.weightsToHidden.matrix[i];
+			}
+		}
+		
+		for(var n in tempBrain.AdditionalHiddenLayers)
+		{
+			var temp = tempBrain.AdditionalHiddenLayers[n].weights.matrix;
+			var parent1Layer = parent1.AdditionalHiddenLayers[n].weights.matrix;
+			var parent2Layer = parent2.AdditionalHiddenLayers[n].weights.matrix;
+			console.log(temp)
+			random = getRandomInt(0,temp.length-1);
+			for(var i in temp)
+			{
+				if(i<random)
+				{
+					tempBrain.AdditionalHiddenLayers[n].weights.matrix[i] = parent1Layer[i];
+				}
+				else
+				{
+					tempBrain.AdditionalHiddenLayers[n].weights.matrix[i] = parent2Layer[i];
+				}
+				
+			}
+			
+		}
+		for(var n in tempBrain.AdditionalHiddenLayers)
+		{
+			var temp = tempBrain.AdditionalHiddenLayers[n].biases;
+			var parent1Layer = parent1.AdditionalHiddenLayers[n].biases;
+			var parent2Layer = parent2.AdditionalHiddenLayers[n].biases;
+			
+			random = getRandomInt(0,temp.length-1);
+			for(var i in temp)
+			{
+				if(i<random)
+				{
+					tempBrain.AdditionalHiddenLayers[n].biases[i] = parent1Layer[i];
+				}
+				else
+				{
+					tempBrain.AdditionalHiddenLayers[n].biases[i] = parent2Layer[i];
+				}
+			}
+			
+		}
+		
+		
+		random = getRandomInt(0,tempBrain.weightsToOutput.length-1);
+		for(var i in tempBrain.weightsToOutput)
+		{
+			if(i<random)
+			{
+				tempBrain.weightsToOutput[i] = parent1.weightsToOutput[i];
+			}
+			else
+			{
+				tempBrain.weightsToOutput[i] = parent2.weightsToOutput[i];
+			}
+		}
+		random = getRandomInt(0,tempBrain.biasToHidden.length-1);
+		for(var i in tempBrain.biasToHidden)
+		{
+			if(i<random)
+			{
+				tempBrain.biasToHidden[i] = parent1.biasToHidden[i];
+			}
+			else
+			{
+				tempBrain.biasToHidden[i] = parent2.biasToHidden[i];
+			}
+		}
+		random = getRandomInt(0,tempBrain.biasToOutput.length-1);
+		for(var i in tempBrain.biasToOutput)
+		{
+			if(i<random)
+			{
+				tempBrain.biasToOutput[i] = parent1.biasToOutput[i];
+			}
+			else
+			{
+				tempBrain.biasToOutput[i] = parent2.biasToOutput[i];
+			}
+		}
+		
+		tempBrain.mutate(mutateByGaussian);
+		
+		kids.push(new Birdie(tempBrain));
+	}
+	birdies = kids;
+	console.log("Generation: "+generation);
+}

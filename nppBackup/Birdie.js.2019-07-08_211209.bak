@@ -1,0 +1,72 @@
+const birdImg = new Image(70, 51);
+birdImg.src = 'flappy.png';
+
+class Birdie{
+	constructor(brain)
+	{
+		this.fitness = 0;
+		this.x = 100;
+		this.y = canvas.height/2;
+		this.speedY = 0;
+		this.brain = brain;
+		this.image = birdImg;
+		this.score = 0;
+		this.width = 70;
+		this.height = 51;
+	}
+	update(ctx)
+	{
+		if(this.y+this.height<canvas.height)this.speedY+=gravity/10;
+		this.fitness += wallSpeed;
+		// var input1 = Points[this.score-wallsDestroyed][0];
+		// var input2 = Points[this.score-wallsDestroyed][1];
+		// var input3 = this.speedY;
+		// if(this.brain.guess(input1,input2,input3))this.jump();
+		
+		this.y += this.speedY;
+		ctx.drawImage(this.image,this.x,this.y);
+		return this;
+	}
+	jump()
+	{
+		if(this.speedY>=0)
+		{
+			this.y--;
+			this.speedY += -(this.speedY) - gravity*3.5;
+		}
+		
+	}
+	collision()
+	{
+		if(this.y<0 || this.y > canvas.height)
+		{
+			return true;
+		}
+		for(var i in walls)
+		{
+			var wall = walls[i];
+			if(this.x + this.width > wall.x && this.x < wall.x + wall.width && this.y + this.height > wall.y && this.y < wall.y + wall.height)
+			{
+				
+				return true;
+			}
+		}
+		for(var i in Points)
+		{
+			if(this.score == wallsDestroyed)
+			{
+				if(this.x >= Points[this.score-wallsDestroyed][0])this.score++;
+			}
+			
+		}
+		return false;
+	}
+	calculateFitness()
+	{
+		this.fitness /= canvas.width;
+		// var distX = Points[this.score-wallsDestroyed][0];
+		// var distY = Points[this.score-wallsDestroyed][1];
+		// var distance = Math.sqrt(Math.pow(this.x - distX,2)+Math.pow(this.y - distY),2);
+		// this.fitness -= distance/canvas.width;
+	}
+}

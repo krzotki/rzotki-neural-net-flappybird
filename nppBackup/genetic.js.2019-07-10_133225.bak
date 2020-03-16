@@ -1,0 +1,12 @@
+
+function nextGeneration()
+{
+	while(deadBirdies[deadBirdies.length-1].fitness>1000)
+	{
+		for(var i in deadBirdies)
+		{
+			deadBirdies[i].fitness/=10;
+		}
+	}
+	
+}

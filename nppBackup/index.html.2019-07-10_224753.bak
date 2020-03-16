@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>Template</title>
+		<link rel="stylesheet" href="style.css"/>
+		<style>
+			body
+			{
+				background:#505050;
+				margin:0;
+				padding:0;
+			}
+			canvas
+			{
+				border:solid black 1px;
+			}
+			#score,#speed,#generation,#skipper
+			{
+				float:left;
+				margin:50px;
+				font-size:20px;
+				color:white;
+			}
+			#skipper
+			{
+				height:150px;
+				font-size:20px;
+				width:150px;
+				color:black;
+			}
+		</style>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/krzotki/Matrix/Matrix.js"></script>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/krzotki/NeuralNetwork/NeuralNetwork.js"></script>
+		<!-- <script src="NeuralNetwork.js"></script> -->
+		<script src="Birdie.js"></script>
+		<script src="Wall.js"></script>
+		<script src="genetic.js"></script>
+		
+	</head>
+	
+	<body>
+		
+		<canvas id="canv" width="1200" height="700" ></canvas>
+		<div id="stats">
+			<p id="score"></p>
+			<input  id="speed" type="range" min="1" max="300" value="60">
+			<p id="generation"></p>
+			<button id="skipper" onclick="skipEvolution(100,100)">Przeskocz do 100 punktów lub 100 generacji (może chwile potrwać)</button>
+		</div>
+		<script src="sketch.js"></script>
+		
+	</body>
+</html>

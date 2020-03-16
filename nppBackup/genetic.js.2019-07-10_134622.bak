@@ -1,0 +1,32 @@
+
+function nextGeneration()
+{
+
+	while(deadBirdies[deadBirdies.length-1].fitness>100)
+	{
+		for(var i in deadBirdies)
+		{
+			deadBirdies[i].fitness/=10;
+			deadBirdies[i].fitness = Math.ceil(deadBirdies[i].fitness);
+		}
+	}
+	var matingPool =[];
+	
+	for(var i in deadBirdies)
+	{
+		for(var g=0;g<deadBirdies[i].fitness;g++)
+		{
+			matingPool.push(deadBirdies[i]);
+		}
+	}
+	
+	var kids = [];
+	
+	for(var i=0;i<maxPopulation;i++)
+	{
+		var random = getRandomInt(0,matingPool.length-1);
+		var parent1 = matingPool[random];
+		var random = getRandomInt(0,matingPool.length-1);
+		var parent2 = matingPool[random];
+	}
+}

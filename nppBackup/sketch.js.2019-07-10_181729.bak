@@ -1,0 +1,189 @@
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+} 
+function mutateByGaussian(value){
+	var random = getRandomInt(0,100);
+	if(random<mutationRate)
+	{
+		var gaussian = Math.round(Math.random());
+		var x = value + gaussian*0.5;
+		return x;
+	}
+	else
+	{
+		return value;
+	}
+    
+}
+document.getElementById("speed").onchange = function(){
+	drawSpeed = parseInt(document.getElementById("speed").value);
+	clearInterval(drawInterval);
+	drawInterval = setInterval(draw,1000/drawSpeed);
+}
+var canvas = document.getElementById("canv");
+canvas.width = screen.width-20;
+var wallsDestroyed = 0;
+var gravity =2;
+var gapSize = 200;
+var wallWidth = 100;
+var wallSpeed = 3;
+var birdies = [];
+var deadBirdies = [];
+var walls = [];
+var drawSpeed = 100;
+var spawnSpeed = 200;
+var maxPopulation = 200;
+var mutationRate = 10;
+var generation = 0;
+var drawInterval,spawnInterval=0;
+var bestScore=0;
+var showGame = true;
+function draw()
+{
+	if(spawnInterval==0)
+	{
+		spawnObstacle();
+		spawnInterval=spawnSpeed;
+	}
+	else spawnInterval--;
+	
+	
+	
+	if(birdies.length==0)
+	{
+		jumpToTheNextGen();
+	}
+	if(showGame)graphicUpdate();
+	else 
+	{
+		plainUpdate();
+	}
+	return;
+}
+
+function skipEvolution()
+{	
+	if(bestScore<100)
+	{
+		showGame = false;
+		clearInterval(drawInterval);
+		speedRun();
+	}
+	else
+	{
+		showGame = true;
+		clearInterval(drawInterval);
+		drawInterval = setInterval(draw,1000/drawSpeed);
+	}
+}
+
+function speedRun()
+{
+	draw();
+	if(bestScore<100)
+	{
+		speedRun();
+		return;
+	}
+	else
+	{
+		skipEvolution();
+	}
+}
+
+function plainUpdate()
+{
+	updateBirdies();
+	updateWalls();
+	return;
+}
+
+function graphicUpdate()
+{
+	var ctx = canvas.getContext("2d");
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	updateBirdies(ctx);
+	updateWalls(ctx);
+	updateDOM();
+}
+
+function jumpToTheNextGen()
+{
+	clearInterval(drawInterval);
+	clearInterval(spawnInterval);
+	walls = [];
+	spawnInterval=spawnSpeed
+	birdies = nextGeneration();
+	deadBirdies = [];
+	drawInterval = setInterval(draw,1000/drawSpeed);
+	spawnObstacle();
+	generation++;
+	return;
+}
+
+function updateBirdies(ctx)
+{
+
+	for(var i in birdies)
+	{
+		birdies[i].update(ctx);
+		if(birdies[i].score>bestScore)bestScore=birdies[i].score;
+	}
+	for(var i in birdies)
+	{
+		if(birdies[i].collision())
+		{
+			
+			birdies[i].calculateFitness();
+			deadBirdies.push(birdies[i]);
+			birdies.splice(i,1);
+		}
+	}
+}
+function updateWalls(ctx)
+{
+	for(var i in walls)
+	{
+		walls[i].update(ctx);
+	}
+	for(var i in walls)
+	{
+		if(walls[i].x+walls[i].width<0)
+		{
+			walls.splice(i,1);
+			wallsDestroyed++;
+		}
+	}
+}
+function spawnObstacle()
+{
+	
+	var random = getRandomInt(1,canvas.height-gapSize);
+	walls.push(new Wall(0,random));
+	walls.push(new Wall(random+gapSize,canvas.height-(random+gapSize)));
+	for(var i in birdies)
+	{
+		birdies[i].points.push([canvas.width+wallWidth,random+gapSize/2]);
+		
+	}
+}
+
+function updateDOM()
+{
+	var display = document.getElementById("score");
+	if(birdies[0])display.innerHTML = birdies[0].score;
+	document.getElementById("generation").innerHTML ="Generacja: " + generation;
+}
+
+
+drawInterval = setInterval(draw,1000/drawSpeed);
+
+for(var i=0;i<maxPopulation;i++)
+{
+	var nn = new NeuralNetwork(3,8,1);
+	birdies.push(new Birdie(nn));
+	
+}
+

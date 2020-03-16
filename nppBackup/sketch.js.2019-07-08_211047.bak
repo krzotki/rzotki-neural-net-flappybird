@@ -1,0 +1,91 @@
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+} 
+function getGaussian(){
+    return Math.round(Math.random());
+}
+
+var canvas = document.getElementById("canv");
+var wallsDestroyed = 0;
+var gravity =2;
+var gapSize = 200;
+var wallWidth = 100;
+var wallSpeed = 3;
+var birdies = [];
+var deadBirdies = [];
+var walls = [];
+var Points = [];
+var drawSpeed = 1000/60;
+var spawnSpeed = 2250;
+var drawInterval,spawnInterval;
+function draw()
+{
+	var ctx = canvas.getContext("2d");
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	updateBirdies(ctx);
+	updateWalls(ctx);
+}
+
+function updateBirdies(ctx)
+{
+	for(var i in birdies)
+	{
+		birdies[i].update(ctx);
+	}
+	for(var i in birdies)
+	{
+		if(birdies[i].collision())
+		{
+			
+			birdies[i].calculateFitness();
+			deadBirdies.push(birdies[i]);
+			birdies.splice(i,1);
+		}
+	}
+}
+function updateWalls(ctx)
+{
+	for(var i in Points)
+	{
+		Points[i][0]-=wallSpeed;
+		
+	}
+	for(var i in Points)
+	{
+		if(Points[i][0]<0)
+		{
+			Points.splice(i,1);
+		}
+		
+	}
+	for(var i in walls)
+	{
+		walls[i].update(ctx);
+	}
+	for(var i in walls)
+	{
+		if(walls[i].x+walls[i].width<0)
+		{
+			walls.splice(i,1);
+			wallsDestroyed++;
+		}
+	}
+}
+function spawnObstacle()
+{
+	var random = getRandomInt(gapSize,canvas.height-gapSize);
+	walls.push(new Wall(0,random));
+	walls.push(new Wall(random+gapSize,canvas.height-(random+gapSize)));
+	Points.push([canvas.width+wallWidth,random+gapSize/2]);
+}
+
+onkeypress = function()
+{
+	birdies[0].jump();
+}
+
+drawInterval = setInterval(draw,drawSpeed);
+spawnInterval = setInterval(spawnObstacle,spawnSpeed);
+birdies.push(new Birdie());

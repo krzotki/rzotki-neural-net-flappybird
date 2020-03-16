@@ -1,0 +1,80 @@
+
+function nextGeneration()
+{
+
+	while(deadBirdies[deadBirdies.length-1].fitness>100)
+	{
+		for(var i in deadBirdies)
+		{
+			deadBirdies[i].fitness/=10;
+			deadBirdies[i].fitness = Math.ceil(deadBirdies[i].fitness);
+		}
+	}
+	var matingPool =[];
+	
+	for(var i in deadBirdies)
+	{
+		for(var g=0;g<deadBirdies[i].fitness;g++)
+		{
+			matingPool.push(deadBirdies[i].brain);
+		}
+	}
+	
+	var kids = [];
+	
+	for(var i=0;i<maxPopulation;i++)
+	{
+		var random = getRandomInt(0,matingPool.length-1);
+		var parent1 = matingPool[random];
+		var random = getRandomInt(0,matingPool.length-1);
+		var parent2 = matingPool[random];
+		
+		var tempBrain = new NeuralNetwork(3,8,1);
+		
+		for(var i in tempBrain.weightsToHidden)
+		{
+			if(i< Math.floor(tempBrain.weightsToHidden.length/2))
+			{
+				tempBrain.weightsToHidden[i] = parent1.weightsToHidden[i];
+			}
+			else
+			{
+				tempBrain.weightsToHidden[i] = parent2.weightsToHidden[i];
+			}
+		}
+		for(var i in tempBrain.weightsToOutput)
+		{
+			if(i< Math.floor(tempBrain.weightsToOutput.length/2))
+			{
+				tempBrain.weightsToOutput[i] = parent1.weightsToOutput[i];
+			}
+			else
+			{
+				tempBrain.weightsToOutput[i] = parent2.weightsToOutput[i];
+			}
+		}
+		for(var i in tempBrain.biasToHidden)
+		{
+			if(i< Math.floor(tempBrain.biasToHidden.length/2))
+			{
+				tempBrain.biasToHidden[i] = parent1.biasToHidden[i];
+			}
+			else
+			{
+				tempBrain.biasToHidden[i] = parent2.biasToHidden[i];
+			}
+		}
+		for(var i in tempBrain.biasToOutput)
+		{
+			if(i< Math.floor(tempBrain.biasToOutput.length/2))
+			{
+				tempBrain.biasToOutput[i] = parent1.biasToOutput[i];
+			}
+			else
+			{
+				tempBrain.biasToOutput[i] = parent2.biasToOutput[i];
+			}
+		}
+		kids.push(new Birdie(tempBrain))l
+	}
+}

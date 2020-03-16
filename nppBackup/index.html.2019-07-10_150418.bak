@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Template</title>
+		<link rel="stylesheet" href="style.css"/>
+		<style>
+			body
+			{
+				background:#505050;
+				margin:0;
+				padding:0;
+			}
+			canvas
+			{
+				border:solid black 1px;
+			}
+			p
+			{
+				font-size:30px;
+			}
+		</style>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/krzotki/Matrix/Matrix.js"></script>
+		<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/krzotki/NeuralNetwork/NeuralNetwork.js"></script> -->
+		<script src="NeuralNetwork.js"></script>
+		<script src="Birdie.js"></script>
+		<script src="Wall.js"></script>
+		<script src="genetic.js"></script>
+		
+	</head>
+	
+	<body>
+		
+		<canvas id="canv" width="1200" height="800" ></canvas>
+		<p id="score"></p>
+		<input  id="speed" type="range" min="1" max="1000" value="60">
+		<p id="generation"></p>
+		<script src="sketch.js"></script>
+		
+	</body>
+</html>

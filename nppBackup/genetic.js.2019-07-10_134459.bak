@@ -1,0 +1,14 @@
+
+function nextGeneration()
+{
+
+	while(deadBirdies[deadBirdies.length-1].fitness>100)
+	{
+		for(var i in deadBirdies)
+		{
+			deadBirdies[i].fitness/=10;
+			deadBirdies[i].fitness = Math.ceil(deadBirdies[i].fitness);
+		}
+	}
+	
+}
